@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title></title>
+      <link href="/2022/05/31/My-New-Post/"/>
+      <url>/2022/05/31/My-New-Post/</url>
+      
+        <content type="html"><![CDATA[<hr><p>title: My New Post<br>date: 2022-05-31 21:32:13<br>tags:《Spark HA&amp;Yarn配置》<br>Spark（HA）<br>支持的Zookeeper版本为zookeeper-3.7.0版本<br>（1）修改spark-env.sh配置文件<br>删除SPARK_MASTER_HOST&#x3D;node1不固定master节点<br>增加内容：<br>（2）将spark-env.sh分发到node2和node3<br>scp spark-env.sh node2:&#x2F;export&#x2F;server&#x2F;spark&#x2F;conf&#x2F;<br>scp spark-env.sh node3:&#x2F;export&#x2F;server&#x2F;spark&#x2F;conf&#x2F;<br>关闭当前StandAlone集群(之前需开启配置完成的zookeeper)<br>（4）启动集群:<br>在node1上 启动一个master 和全部worker<br>cd &#x2F;export&#x2F;server&#x2F;spark&#x2F;sbin&#x2F;start-all.sh<br>在node2上启动一个备用的master进程<br>（5）查看状态：①node1:8080端口状态为ALIVE<br>②在node2上是备用master，当node1启用master时node2状态为standby<br>(8080端口可能会发生顺延)<br>如下端口顺延为8082：<br>关闭node1的master进程，node2master启用其状态切换为ALIVE<br>（6）测试：提交一个spark任务到当前ALIVEmaster上:<br>bin&#x2F;spark-submit –master spark:&#x2F;&#x2F;node1:7077 &#x2F;export&#x2F;server&#x2F;spark&#x2F;examples&#x2F;src&#x2F;main&#x2F;python&#x2F;pi.py 1000<br>提交后，将ALIVEmaster kill掉，不会影响程序<br>当新的master（即使用node2备用master）接收集群后, 程序继续运行, 正常得到结果<br>5.：HA模式下，主备切换不会影响正在运行的程序<br>Spark(Yarn)<br>1.保证 HADOOP_CONF_和 DIR_YARN_CONF_DIR 已经配置在 spark-env.sh 和环境变量中<br>3.链接到YARN中（注: 交互式环境 pyspark 和 spark-shell 无法运行 cluster模式）<br>4.client 模式测试<br>运行&#x2F;export&#x2F;server&#x2F;spark&#x2F;bin&#x2F;spark-submit –master yarn –deploy-mode cluster –driver-memory 512m –executor-memory 512m –num-executors 3 –total-executor-cores 3 &#x2F;export&#x2F;server&#x2F;spark&#x2F;examples&#x2F;src&#x2F;main&#x2F;python&#x2F;pi.py 3 测试yarn提交spark任务<br>5.cluster 模式测试<br>&#x2F;export&#x2F;server&#x2F;spark&#x2F;bin&#x2F;spark-submit –master yarn –deploy-mode cluster –driver-memory 512m –executor-memory 512m –num-executors 3 –total-executor-cores 3 &#x2F;export&#x2F;server&#x2F;spark&#x2F;examples&#x2F;src&#x2F;main&#x2F;python&#x2F;pi.py 3<br>通过web UI查看任务运行状态<br><a href="http://master:8080/">http://master:8080/</a><br>spark-submit任务提交后，由yarn负责资源调度<br><a href="http://master:19888/">http://master:19888/</a><br>spark:<br>部署模式<br>Spark 有多种运行模式， Spark 支持本地运行模式（Local 模式）、独立运行模式（Standalone 模式）、YARN（Yet Another Resource Negotiator）<br>local(本地模式)：常用于本地开发测试，本地还分为local单线程和local-cluster多线程;<br>standalone(集群模式)：典型的Mater&#x2F;slave模式，不过也能看出Master是有单点故障的；Spark支持ZooKeeper来实现 HA<br>on yarn(集群模式)： 运行在 yarn 资源管理器框架之上，由 yarn 负责资源管理，Spark 负责任务调度和计算<br>Spark运行架构包括：Master（集群资源管理）、Slaves（运行任务的工作节点）、应用程序的控制节点（Driver）和每个工作节点上负责任务的执行进程（Executor）；<br>2、Master是集群资源的管理者（Cluster Manager）。支持：Standalone,Yarn,Mesos；Slaves在spark中被称为Worker，工作节点，；<br>1.Spark的计算模式属于MapReduce,在借鉴Hadoop MapReduce优点的同时很好地解决了MapReduce所面临的问题<br>2.不局限于Map和Reduce操作，还提供了多种数据集操作类型，编程模型比Hadoop MapReduce更灵活<br>3.Spark提供了内存计算，可将中间结果放到内存中，对于迭代运算效率更高<br>4.Spark基于DAG的任务调度执行机制，要优于Hadoop MapReduce的迭代执行机制(函数调用)<br>spark on yarn 的支持两种模式：<br>　　　yarn-cluster：适用于生产环境<br>　　　yarn-client：适用于交互、调试，希望立即看到app的输出<br>standalone模式，即独立模式，自带完整的服务，可单独部署到一个集群中，无需依赖任何其他资源管理系统。从一定程度上说，该模式是其他两种的基础。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2022/05/31/hello-world/"/>
+      <url>/2022/05/31/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><div class="story post-story"><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p></div>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
